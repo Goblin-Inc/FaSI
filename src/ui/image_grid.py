@@ -18,11 +18,14 @@ class ImageGrid(QScrollArea):
 
         self.setObjectName("resultsArea")
         self.setWidgetResizable(True)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
         self.container = QWidget()
         self.grid_layout = QGridLayout(self.container)
-        self.grid_layout.setSpacing(16)
+        self.grid_layout.setSpacing(14)
         self.grid_layout.setContentsMargins(10, 10, 10, 10)
+        for col in range(4):
+            self.grid_layout.setColumnStretch(col, 1)
         self.setWidget(self.container)
 
     def clear_grid(self):
@@ -37,7 +40,7 @@ class ImageGrid(QScrollArea):
         lbl = QLabel(text)
         lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lbl.setStyleSheet("color: #cbd5e1; font-size: 16px; padding: 40px;")
-        self.grid_layout.addWidget(lbl, 0, 0)
+        self.grid_layout.addWidget(lbl, 0, 0, 1, 4)
 
     def populate(self, results: List[ImageResult]):
         self.clear_grid()

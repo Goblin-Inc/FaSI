@@ -1,21 +1,63 @@
 import os
 import re
 from pathlib import Path
-from PyQt6.QtCore import Qt, pyqtSignal
-from PyQt6.QtGui import QImage, QPixmap
+from PyQt6.QtCore import Qt, QRect, pyqtSignal
+from PyQt6.QtGui import QImage, QPainter, QPainterPath, QPixmap
 from PyQt6.QtWidgets import (
     QFileDialog,
     QFrame,
     QHBoxLayout,
     QLabel,
     QPushButton,
+    QSizePolicy,
     QVBoxLayout,
+    QWidget,
 )
 
 from src.core.config import config
 from src.core.image_worker import FullImageTask, ImageWorkerPool
 from src.providers import ImageResult
 from src.utils.clipboard import copy_image_to_clipboard
+
+
+class ImagePreviewWidget(QLabel):
+    """Виджет превью, который аккуратно заполняет блок без растягивания сетки."""
+
+    def __init__(self, text: str = "Загрузка...", parent=None):
+        super().__init__(text, parent)
+        self.setObjectName("imagePreview")
+        self.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.setFixedHeight(165)
+        self.setMinimumWidth(100)
+        self.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Fixed)
+        self._pixmap: QPixmap | None = None
+
+    def set_preview_pixmap(self, pixmap: QPixmap):
+        self._pixmap = pixmap
+        self.setText("")
+        self.update()
+
+    def paintEvent(self, event):
+        if self._pixmap and not self._pixmap.isNull():
+            painter = QPainter(self)
+            painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+            painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
+
+            path = QPainterPath()
+            path.addRoundedRect(0.0, 0.0, float(self.width()), float(self.height()), 12.0, 12.0)
+            painter.setClipPath(path)
+
+            scaled = self._pixmap.scaled(
+                self.size(),
+                Qt.AspectRatioMode.KeepAspectRatioByExpanding,
+                Qt.TransformationMode.SmoothTransformation,
+            )
+            x = (self.width() - scaled.width()) // 2
+            y = (self.height() - scaled.height()) // 2
+            painter.drawPixmap(x, y, scaled)
+            painter.end()
+        else:
+            super().paintEvent(event)
 
 
 class ImageCard(QFrame):
@@ -30,23 +72,23 @@ class ImageCard(QFrame):
 
         self.setObjectName("imageCard")
         self.setFixedHeight(265)
+        self.setMinimumWidth(180)
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(10, 10, 10, 10)
         layout.setSpacing(8)
 
-        self.image_label = QLabel("Загрузка...")
-        self.image_label.setObjectName("imagePreview")
-        self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.image_label.setFixedHeight(170)
+        self.image_label = ImagePreviewWidget("Загрузка...")
         layout.addWidget(self.image_label)
 
         clean_title = (result.title or "Изображение").strip()
-        if len(clean_title) > 52:
-            clean_title = clean_title[:49] + "..."
+        if len(clean_title) > 42:
+            clean_title = clean_title[:39] + "..."
         self.title_label = QLabel(clean_title)
         self.title_label.setObjectName("cardTitle")
-        self.title_label.setWordWrap(True)
+        self.title_label.setFixedHeight(20)
+        self.title_label.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Fixed)
         layout.addWidget(self.title_label)
 
         btn_row = QHBoxLayout()
@@ -55,11 +97,13 @@ class ImageCard(QFrame):
         self.copy_btn = QPushButton("📋 В буфер")
         self.copy_btn.setObjectName("copyCardBtn")
         self.copy_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.copy_btn.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         self.copy_btn.clicked.connect(self.on_copy_clicked)
 
         self.download_btn = QPushButton("💾 Скачать")
         self.download_btn.setObjectName("downloadCardBtn")
         self.download_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.download_btn.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         self.download_btn.clicked.connect(self.on_download_clicked)
 
         btn_row.addWidget(self.copy_btn)
@@ -70,13 +114,7 @@ class ImageCard(QFrame):
         self.loaded_image = image
         self.raw_bytes = raw_bytes
         pixmap = QPixmap.fromImage(image)
-        scaled = pixmap.scaled(
-            300,
-            170,
-            Qt.AspectRatioMode.KeepAspectRatioByExpanding,
-            Qt.TransformationMode.SmoothTransformation,
-        )
-        self.image_label.setPixmap(scaled)
+        self.image_label.set_preview_pixmap(pixmap)
 
     def set_failed(self):
         self.image_label.setText("Недоступно")
