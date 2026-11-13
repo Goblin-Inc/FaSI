@@ -1,0 +1,8 @@
+{
+    "default_provider": "yandex",
+    "results_per_page": 20,
+    "download_path": "~/Pictures/FASI",
+    "ask_save_path": false,
+    "hotkey": "Alt+Space",
+    "timeout": 10
+}

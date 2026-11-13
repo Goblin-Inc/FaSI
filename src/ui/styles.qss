@@ -1,0 +1,199 @@
+/* FaSI — Soft Translucent Glassmorphism Theme */
+
+QMainWindow {
+    background: transparent;
+    color: #eaf4ff;
+}
+
+QWidget {
+    background: transparent;
+    color: #eaf4ff;
+    font-family: "Segoe UI", "Inter", "JetBrainsMono Nerd Font", sans-serif;
+}
+
+QWidget#centralWidget {
+    background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1,
+        stop:0 rgba(9, 16, 24, 0.78),
+        stop:0.5 rgba(12, 22, 32, 0.74),
+        stop:1 rgba(10, 18, 28, 0.80));
+    border: 1px solid rgba(148, 197, 238, 0.22);
+    border-radius: 24px;
+}
+
+QLineEdit#searchInput {
+    background: rgba(16, 26, 38, 0.68);
+    border: 1px solid rgba(132, 175, 212, 0.24);
+    border-radius: 16px;
+    padding: 12px 18px;
+    color: #f0f7ff;
+    font-size: 15px;
+    selection-background-color: #38bdf8;
+}
+
+QLineEdit#searchInput:focus {
+    background: rgba(20, 33, 48, 0.82);
+    border: 1px solid rgba(110, 231, 183, 0.85);
+}
+
+QPushButton {
+    background: rgba(22, 36, 52, 0.65);
+    border: 1px solid rgba(148, 186, 218, 0.22);
+    color: #e6f1fc;
+    border-radius: 14px;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+QPushButton:hover {
+    background: rgba(34, 62, 88, 0.82);
+    border: 1px solid rgba(110, 231, 183, 0.85);
+    color: #ffffff;
+}
+
+QPushButton:pressed {
+    background: rgba(20, 44, 66, 0.92);
+}
+
+QPushButton#primaryBtn {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+        stop:0 rgba(16, 185, 129, 0.72),
+        stop:1 rgba(14, 165, 233, 0.72));
+    border: 1px solid rgba(167, 243, 208, 0.45);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+QPushButton#primaryBtn:hover {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+        stop:0 rgba(16, 185, 129, 0.90),
+        stop:1 rgba(14, 165, 233, 0.90));
+    border: 1px solid rgba(167, 243, 208, 0.85);
+}
+
+QPushButton#clearBtn {
+    background: rgba(30, 41, 59, 0.55);
+    border: 1px solid rgba(148, 163, 184, 0.20);
+    border-radius: 14px;
+    font-size: 16px;
+    padding: 8px 0px;
+}
+
+QPushButton#clearBtn:hover {
+    background: rgba(239, 68, 68, 0.35);
+    border: 1px solid rgba(248, 113, 113, 0.75);
+}
+
+QComboBox {
+    background: rgba(18, 30, 44, 0.70);
+    border: 1px solid rgba(148, 186, 218, 0.24);
+    color: #e6f1fc;
+    border-radius: 14px;
+    padding: 10px 16px;
+    font-size: 13px;
+    min-width: 120px;
+}
+
+QComboBox:hover {
+    border: 1px solid rgba(110, 231, 183, 0.80);
+}
+
+QComboBox::drop-down {
+    border: none;
+    width: 24px;
+}
+
+QComboBox QAbstractItemView {
+    background: rgba(13, 23, 34, 0.96);
+    border: 1px solid rgba(110, 231, 183, 0.45);
+    border-radius: 10px;
+    selection-background-color: rgba(14, 165, 233, 0.45);
+    color: #eaf4ff;
+    padding: 4px;
+}
+
+QScrollArea#resultsArea {
+    border: 1px solid rgba(140, 180, 215, 0.14);
+    border-radius: 20px;
+    background: rgba(8, 14, 22, 0.42);
+}
+
+QScrollBar:vertical {
+    background: transparent;
+    width: 8px;
+    margin: 6px 2px 6px 2px;
+}
+
+QScrollBar::handle:vertical {
+    background: rgba(148, 186, 218, 0.28);
+    border-radius: 4px;
+    min-height: 30px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: rgba(110, 231, 183, 0.65);
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+
+QFrame#imageCard {
+    background: rgba(15, 26, 38, 0.62);
+    border: 1px solid rgba(148, 186, 218, 0.16);
+    border-radius: 18px;
+}
+
+QFrame#imageCard:hover {
+    background: rgba(20, 35, 52, 0.82);
+    border: 1px solid rgba(110, 231, 183, 0.85);
+}
+
+QLabel#imagePreview {
+    background: rgba(9, 15, 24, 0.72);
+    border-radius: 12px;
+    color: #7c97b3;
+    font-size: 12px;
+}
+
+QLabel#cardTitle {
+    color: #dbeafe;
+    font-size: 12px;
+}
+
+QPushButton#copyCardBtn {
+    background: rgba(16, 185, 129, 0.22);
+    border: 1px solid rgba(52, 211, 153, 0.40);
+    color: #d1fae5;
+    border-radius: 11px;
+    padding: 7px 10px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+QPushButton#copyCardBtn:hover {
+    background: rgba(16, 185, 129, 0.55);
+    border: 1px solid rgba(110, 231, 183, 0.95);
+    color: #ffffff;
+}
+
+QPushButton#downloadCardBtn {
+    background: rgba(14, 165, 233, 0.22);
+    border: 1px solid rgba(56, 189, 248, 0.40);
+    color: #e0f2fe;
+    border-radius: 11px;
+    padding: 7px 10px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+QPushButton#downloadCardBtn:hover {
+    background: rgba(14, 165, 233, 0.55);
+    border: 1px solid rgba(125, 211, 252, 0.95);
+    color: #ffffff;
+}
+
+QLabel#statusLabel {
+    color: #9eb8d2;
+    font-size: 12px;
+}

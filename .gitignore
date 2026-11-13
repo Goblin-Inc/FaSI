@@ -1,0 +1,7 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+core_cpp/build/
+core_cpp/*.so
+.DS_Store
