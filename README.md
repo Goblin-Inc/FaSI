@@ -90,9 +90,12 @@ cd FaSI
 # Сборка нативного C++17 модуля (опционально, предсобранный libfasi_core.so уже включён)
 g++ -O3 -shared -fPIC cpp_core/image_cache.cpp -o cpp_core/libfasi_core.so
 
-# Установка зависимостей и запуск
-pip install -r requirements.txt
+# Arch Linux (pacman):
+sudo pacman -S python python-pyqt6 python-requests python-beautifulsoup4 gcc
 python3 main.py
+
+# Либо через универсальный установщик (Arch / Ubuntu):
+./install.sh
 ```
 
 ---
