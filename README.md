@@ -1,8 +1,10 @@
 <div align="center">
 
+🌐 **Language:** **English** | [Русский (README_Ru.md)](README_Ru.md)
+
 # ⚡ FaSI — Fast Search Images
 
-**Молниеносный десктопный оверлей для поиска, просмотра и копирования изображений по хоткею `Alt+Space` на базе PyQt6 и нативного ядра C++17 (`libfasi_core.so`)**
+**Lightning-fast desktop overlay for searching, previewing, and copying images via `Alt+Space`, built with PyQt6 and a native C++17 core (`libfasi_core.so`)**
 
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![C++17](https://img.shields.io/badge/C++-17-00599C?style=for-the-badge&logo=cplusplus&logoColor=white)](https://isocpp.org)
@@ -17,84 +19,84 @@
 
 ---
 
-## 📖 О проекте
+## 📖 Overview
 
-**FaSI (Fast Search Images)** — легковесный гибридный лаунчер и оверлей в стиле Spotlight / Rofi для Linux (X11 / Wayland / KDE Plasma), созданный для мгновенного поиска референсов, обоев, иконок и иллюстраций прямо поверх активных окон без открытия тяжёлого браузера.
+**FaSI (Fast Search Images)** is a lightweight Spotlight / Rofi-style hybrid launcher and overlay for Linux (X11 / Wayland / KDE Plasma), crafted for instantly finding references, wallpapers, icons, and illustrations right on top of your active windows without opening a heavy web browser.
 
-### ✨ Ключевые возможности
-- **Мгновенный вызов (`Alt+Space` / `SIGUSR1`)**: работает в режиме единого процесса (Single-Instance daemon). Повторный запуск бинарника или нажатие хоткея отправляет сигнал `SIGUSR1` уже запущенному процессу и открывает окно за **< 10 мс**.
-- **Гибридное ядро Python + C++17 (`libfasi_core.so`)**:
-  - Нативный модуль `cpp_core/image_cache.cpp` отвечает за быструю генерацию FNV-1a (64-bit) ключей кэша и низкоуровневое управление дисковым пулом превью.
-  - Многопоточный `ImageLoader` (`QThreadPool`) асинхронно загружает миниатюры параллельно без единого фриза интерфейса.
-- **Мульти-провайдерный поиск с авто-фоллбэком**:
-  - Поддержка **Yandex Images**, **Google / Bing Images** и **DuckDuckGo Images** с переключением в 1 клик.
-  - Интеллектуальная очистка поискового запроса (`clean_query`) — автоматически отсекает лишние разговорные слова (*«найди фото...», «покажи картинку...»*).
-- **Встроенный Lightbox и буфер обмена**:
-  - Клик по карточке открывает полноразмерное превью с метаданными и разрешением.
-  - Копирование самой картинки (`QPixmap`) или прямой ссылки (`URL`) в системный буфер обмена одним нажатием.
+### ✨ Key Features
+- **Instant Summon (`Alt+Space` / `SIGUSR1`)**: runs as a single-instance background daemon. Running the binary again or pressing your global hotkey sends a `SIGUSR1` signal to the running process and pops up the overlay in **< 10 ms**.
+- **Hybrid Python + C++17 Core (`libfasi_core.so`)**:
+  - Native `cpp_core/image_cache.cpp` module handles ultra-fast FNV-1a (64-bit) cache key hashing and low-level disk thumbnail pool management.
+  - Multi-threaded `ImageLoader` (`QThreadPool`) asynchronously fetches thumbnails in parallel with zero UI freezes.
+- **Multi-Provider Search with Auto-Fallback**:
+  - Supports **Yandex Images**, **Google / Bing Images**, and **DuckDuckGo Images** with 1-click provider switching.
+  - Smart natural-language query sanitizer (`clean_query`) that strips conversational filler words automatically.
+- **Built-in Lightbox & Clipboard Integration**:
+  - Clicking any card opens a full-resolution preview dialog with image metadata and dimensions.
+  - Copy either the raw image (`QPixmap`) or the direct image `URL` to your system clipboard in a single click.
 
 ---
 
-## ⌨️ Горячие клавиши и управление
+## ⌨️ Shortcuts & Controls
 
-| Клавиша / Действие | Описание |
+| Key / Action | Description |
 |---|---|
-| `Alt + Space` | Показать / скрыть оверлей FaSI поверх всех окон |
-| `Enter` | Запустить поиск по введённому запросу |
-| `Клик по карточке` | Открыть полноразмерное превью изображения (`ImagePreviewDialog`) |
-| `Copy Image` | Скопировать само изображение в системный буфер обмена (`Ctrl+V` в Discord / Telegram / GIMP) |
-| `Copy URL` | Скопировать прямую ссылку на оригинал изображения |
-| `Download` | Сохранить оригинал изображения на диск |
-| `Esc` | Закрыть окно превью или свернуть оверлей в фоновый режим |
+| `Alt + Space` | Toggle the FaSI overlay on top of all windows |
+| `Enter` | Execute search for the entered query |
+| `Click on card` | Open full-size image lightbox (`ImagePreviewDialog`) |
+| `Copy Image` | Copy the actual image bitmap to the system clipboard (`Ctrl+V` into Discord / Telegram / GIMP) |
+| `Copy URL` | Copy the direct link to the original image |
+| `Download` | Save the original image to disk |
+| `Esc` | Close the preview dialog or hide the overlay into the background |
 
 ---
 
-## 🏗️ Архитектура проекта
+## 🏗️ Project Architecture
 
 ```
 FaSI/
-├── main.py                  # Single-Instance демон (/tmp/fasi_app.pid), обработка SIGUSR1, системный трей
+├── main.py                  # Single-Instance daemon (/tmp/fasi_app.pid), SIGUSR1 handler, system tray
 ├── ui/
-│   ├── main_window.py       # Главное безрамочное окно с тенью, строкой поиска и 4-колоночной сеткой
-│   ├── widgets.py           # Кастомные карточки ImagePreviewWidget и модальное окно просмотра
-│   └── styles.py            # Тёмная тема оформления (QSS) в стиле Deep Indigo / Glassmorphism
+│   ├── main_window.py       # Frameless main overlay with drop shadow, search bar, and 4-column grid
+│   ├── widgets.py           # Custom ImagePreviewWidget cards and modal lightbox dialog
+│   └── styles.py            # Deep Indigo / Glassmorphism dark stylesheet (QSS)
 ├── core/
-│   ├── search_engine.py     # Мульти-движок парсинга (Yandex, Google/Bing, DuckDuckGo) + очистка запросов
-│   ├── image_loader.py      # Пул потоков QRunnable + привязка ctypes к нативной библиотеке C++17
-│   └── settings.py          # Конфигурация провайдеров, таймаутов и лимитов выдачи
+│   ├── search_engine.py     # Multi-engine parser (Yandex, Google/Bing, DuckDuckGo) + query cleaner
+│   ├── image_loader.py      # QRunnable thread pool + ctypes bindings to the native C++17 library
+│   └── settings.py          # Provider configuration, timeouts, and result limits
 ├── cpp_core/
-│   ├── image_cache.cpp      # C++17 модуль: 64-bit FNV-1a хэширование URL и аудит дискового кэша
-│   └── CMakeLists.txt       # Сборка разделяемой библиотеки libfasi_core.so
+│   ├── image_cache.cpp      # C++17 module: 64-bit FNV-1a URL hashing and disk cache auditing
+│   └── CMakeLists.txt       # Shared library build configuration (libfasi_core.so)
 └── assets/
-    └── fasi.svg             # Векторная иконка приложения для KDE / GNOME
+    └── fasi.svg             # Vector application icon for KDE / GNOME
 ```
 
 ---
 
-## 📦 Установка и запуск
+## 📦 Installation & Usage
 
-### Вариант 1: Готовый `.deb` пакет (Рекомендуется для Ubuntu / Debian / KDE Neon)
-Перейдите в раздел [**Releases**](https://github.com/Goblin-Inc/FaSI/releases), скачайте `fasi_1.0.0_amd64.deb` и установите:
+### Option 1: Prebuilt `.deb` Package (Recommended for Ubuntu / Debian / KDE Neon)
+Head over to [**Releases**](https://github.com/Goblin-Inc/FaSI/releases), download `fasi_1.0.0_amd64.deb`, and install it:
 
 ```bash
 sudo dpkg -i fasi_1.0.0_amd64.deb
 sudo apt-get install -f
 ```
-После установки **FaSI** появится в меню приложений KDE/GNOME и будет доступен по команде `fasi`.
+After installation, **FaSI** will appear in your KDE/GNOME application menu and can be triggered via the `fasi` command.
 
-### Вариант 2: Portable-архив или запуск из исходников
+### Option 2: Portable Archive or Running from Source (Arch Linux / Universal)
 ```bash
 git clone https://github.com/Goblin-Inc/FaSI.git
 cd FaSI
 
-# Сборка нативного C++17 модуля (опционально, предсобранный libfasi_core.so уже включён)
+# Compile the native C++17 module (optional — prebuilt libfasi_core.so is already included)
 g++ -O3 -shared -fPIC cpp_core/image_cache.cpp -o cpp_core/libfasi_core.so
 
 # Arch Linux (pacman):
 sudo pacman -S python python-pyqt6 python-requests python-beautifulsoup4 gcc
 python3 main.py
 
-# Либо через универсальный установщик (Arch / Ubuntu):
+# Or via the universal installer (Arch / Ubuntu):
 ./install.sh
 ```
 
@@ -102,14 +104,14 @@ python3 main.py
 
 ## 📋 Changelog
 
-### `v1.0.0` — Первый публичный релиз *(Текущая версия)*
-- **Добавлено**: Нативное C++17 ядро `libfasi_core.so` с привязкой через `ctypes` и автоматическим Python-fallback.
-- **Добавлено**: Мгновенное переключение видимости окна через UNIX-сигнал `SIGUSR1` и иконка в системном трее.
-- **Добавлено**: Трёхкаскадный поисковый движок (`Yandex`, `Google/Bing`, `DuckDuckGo`) с фильтрацией естественного языка.
-- **Добавлено**: Официальный `.deb` инсталлятор, SVG-иконка и `.desktop` интеграция для Linux.
+### `v1.0.0` — Initial Public Release *(Current)*
+- **Added**: Native C++17 core `libfasi_core.so` bound via `ctypes` with automatic pure-Python fallback.
+- **Added**: Instant window toggling via UNIX `SIGUSR1` signal and system tray integration.
+- **Added**: Three-tier search engine (`Yandex`, `Google/Bing`, `DuckDuckGo`) with natural-language query filtering.
+- **Added**: Official `.deb` installer, custom SVG icon, and Linux `.desktop` integration.
 
 ---
 
 <div align="center">
-Разработано <a href="https://github.com/Goblin-Inc">@Goblin-Inc</a>
+Developed by <a href="https://github.com/Goblin-Inc">@Goblin-Inc</a> • <a href="README_Ru.md">Русская версия</a>
 </div>
